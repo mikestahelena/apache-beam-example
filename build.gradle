@@ -1,0 +1,49 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'com.example.Main'
+}
+
+group = "org.example"
+version = "0.1"
+description = "beam-example"
+java.sourceCompatibility = JavaVersion.VERSION_17
+
+test {
+    // JUnit 4.
+    useJUnit()
+}
+
+dependencies {
+    // App dependencies.
+    implementation "org.apache.beam:beam-sdks-java-core:2.43.0"
+    implementation 'org.apache.beam:beam-sdks-java-io-google-cloud-platform:2.43.0'
+    implementation "org.apache.beam:beam-runners-direct-java:2.43.0"
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
+
+    // Tests dependencies.
+    testImplementation "junit:junit:4.13.2"
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+}
+
+// Package a self-contained jar file.
+jar {
+    baseName = 'pipeline'
+    destinationDirectory = file('build')
+    manifest {
+        attributes 'Main-Class': 'com.example.Main'
+    }
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
