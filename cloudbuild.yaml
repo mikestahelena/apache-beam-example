@@ -7,8 +7,6 @@ steps:
       - |
         git rev-parse --short HEAD > _BUILDNUMBER
     waitFor: ['-']
-    options:
-      logging: CLOUD_LOGGING_ONLY
 
   - id: "build and deploy a dataflow job"
     name: 'gradle:6.8.3-jdk11'
@@ -16,8 +14,6 @@ steps:
     args:
       - '-c'
       - |
-        buildNumber=$(cat _BUILDNUMBER)
-        echo "Build Number is ${buildNumber}"
         apt-get update
         apt-get install sudo
         sudo bash submit.sh org.example.Main \
@@ -33,4 +29,6 @@ steps:
           --usePublicIps=false \
           --region=southamerica-east1 \
     waitFor: ['set build number from git push']
+options:
+  logging: CLOUD_LOGGING_ONLY
 
