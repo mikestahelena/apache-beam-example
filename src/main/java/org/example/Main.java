@@ -11,14 +11,14 @@ import java.util.Arrays;
 
 public class Main {
     public interface Options extends StreamingOptions {
-		@Description("Input text to print.")
-		@Default.String("My input text")
-		String getInputText();
+        @Description("Input text to print.")
+        @Default.String("My input text")
+        String getInputText();
 
-		void setInputText(String value);
-	}
+        void setInputText(String value);
+    }
 
-	public static PCollection<String> buildPipeline(Pipeline pipeline, String inputText) {
+    public static PCollection<String> buildPipeline(Pipeline pipeline, String inputText) {
         return pipeline
                 .apply("Create elements", Create.of(Arrays.asList("Hello", "World!", inputText)))
                 .apply("Print elements",
@@ -28,10 +28,10 @@ public class Main {
                         }));
     }
 
-	public static void main(String[] args) {
-		var options = PipelineOptionsFactory.fromArgs(args).withValidation().as(Options.class);
-		var pipeline = Pipeline.create(options);
-		Main.buildPipeline(pipeline, options.getInputText());
-		pipeline.run().waitUntilFinish();
-	}
+    public static void main(String[] args) {
+        var options = PipelineOptionsFactory.fromArgs(args).withValidation().as(Options.class);
+        var pipeline = Pipeline.create(options);
+        Main.buildPipeline(pipeline, options.getInputText());
+        pipeline.run().waitUntilFinish();
+    }
 }
