@@ -9,7 +9,7 @@ steps:
     waitFor: ['-']
 
   - id: "build and deploy a dataflow job"
-    name: 'gradle:6.8.3-jdk11'
+    name: 'gradle:7.5.1-jdk17'
     entrypoint: 'bash'
     args:
       - '-c'
@@ -18,15 +18,14 @@ steps:
         apt-get install sudo
         sudo bash submit.sh org.example.Main \
           --project=macro-mercury-374220 \
-          --stagingLocation=gs://gcp-dataflow-cloudbuild-stage/staging/ \
-          --gcpTempLocation=gs://gcp-dataflow-cloudbuild-temp/temp/ \
+          --stagingLocation=gs://big-data-files-1/staging/ \
+          --gcpTempLocation=gs://big-data-files-1/temp/ \
           --runner=DataflowRunner \
           --buildNumber=${buildNumber} \
           --serviceAccount=full-access-role@macro-mercury-374220.iam.gserviceaccount.com \
           --jobName=cloudbuild-dataflowjob-1 \
           --numWorkers=2 \
           --maxNumWorkers=20 \
-          --usePublicIps=false \
           --region=southamerica-east1 \
     waitFor: ['set build number from git push']
 options:
